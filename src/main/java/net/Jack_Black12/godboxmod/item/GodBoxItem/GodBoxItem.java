@@ -33,9 +33,14 @@ public class GodBoxItem extends Item {
             // Slots 0-8: Hotbar
             // Slots 9-35: Main inventory grid
             for (int i = 0; i < inventory.getContainerSize(); i++) {
-                ItemStack firstItemCopy = firstHotbarItem.copy();
-                firstItemCopy.setCount(maxStackSize);
-                inventory.setItem(i, firstItemCopy);
+                ItemStack slotItem = inventory.getItem(i);
+
+                // Only fill empty slots, and never overwrite the slot holding the GodBox itself
+                if (slotItem.isEmpty() && slotItem.getItem() != this) {
+                    ItemStack firstItemCopy = firstHotbarItem.copy();
+                    firstItemCopy.setCount(maxStackSize);
+                    inventory.setItem(i, firstItemCopy);
+                }
             }
         }
         return InteractionResultHolder.success(stack);
